@@ -14,4 +14,16 @@ pub enum Error {
     /// URL Parse error
     #[error("not a valid URL")]
     ParseError(#[from] url::ParseError),
+
+    /// Authentication error
+    #[error("authentication error: {0}")]
+    Authentication(String),
+
+    /// Bad request error
+    #[error("bad request: {0}")]
+    BadRequest(String),
+
+    /// Not found error
+    #[error("not found: {0}")]
+    NotFound(String),
 }
