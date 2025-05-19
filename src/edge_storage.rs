@@ -101,9 +101,11 @@ impl<'a> Storage {
     /// 
     /// #[tokio::main]
     /// async fn main() -> Result<(), Error> {
-    ///     let mut client = Client::new("api_key")?;
+    ///     let mut client = Client::new("api_key").await?;
     /// 
     ///     client.storage.init(Endpoint::Frankfurt, "MyStorageZone");
+    /// 
+    ///     Ok(())
     /// }
     /// ```
     pub fn init<T: AsRef<str>>(&mut self, endpoint: Endpoint, storage_zone: T) -> Result<(), Error> {
@@ -130,6 +132,8 @@ impl<'a> Storage {
     /// 
     ///     // Will put a file in STORAGE_ZONE/images/file.png
     ///     client.storage.upload("/images/file.png", file_bytes).await?;
+    /// 
+    ///     Ok(())
     /// }
     /// ```
     pub async fn upload<T: AsRef<str>>(&self, path: T, file: Bytes) -> Result<(), Error> {
