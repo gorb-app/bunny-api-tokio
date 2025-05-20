@@ -1,4 +1,6 @@
-//! B
+//! Edge Storage API
+//! 
+//! Contains enums, structs and functions for the Bunny Edge Storage API
 
 use std::sync::Arc;
 
