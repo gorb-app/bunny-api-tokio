@@ -13,5 +13,5 @@ A Rust library providing **asynchronous access to the Bunny CDN API** using Toki
 Add to your `Cargo.toml`:
 ```toml
 [dependencies]
-bunny-api-tokio = "0.1.0"
+bunny-api-tokio = "0.2.0"
 ```
