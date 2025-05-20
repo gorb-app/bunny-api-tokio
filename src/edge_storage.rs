@@ -144,9 +144,9 @@ impl<'a> Storage {
             .await?;
 
         if response.status().as_u16() == 401 {
-            return Err(Error::Authentication(String::from(response.text().await?)))
+            return Err(Error::Authentication(response.text().await?))
         } else if response.status().as_u16() == 400 {
-            return Err(Error::BadRequest(String::from(response.text().await?)))
+            return Err(Error::BadRequest(response.text().await?))
         }
 
         Ok(())
@@ -181,9 +181,9 @@ impl<'a> Storage {
             .await?;
 
         if response.status().as_u16() == 401 {
-            return Err(Error::Authentication(String::from(response.text().await?)))
+            return Err(Error::Authentication(response.text().await?))
         } else if response.status().as_u16() == 404 {
-            return Err(Error::NotFound(String::from(response.text().await?)))
+            return Err(Error::NotFound(response.text().await?))
         }
 
         Ok(response.bytes().await?)
@@ -212,9 +212,9 @@ impl<'a> Storage {
             .await?;
 
         if response.status().as_u16() == 401 {
-            return Err(Error::Authentication(String::from(response.text().await?)))
+            return Err(Error::Authentication(response.text().await?))
         } else if response.status().as_u16() == 400 {
-            return Err(Error::BadRequest(String::from(response.text().await?)))
+            return Err(Error::BadRequest(response.text().await?))
         }
 
         Ok(())
@@ -245,9 +245,9 @@ impl<'a> Storage {
             .await?;
 
         if response.status().as_u16() == 401 {
-            return Err(Error::Authentication(String::from(response.text().await?)))
+            return Err(Error::Authentication(response.text().await?))
         } else if response.status().as_u16() == 400 {
-            return Err(Error::BadRequest(String::from(response.text().await?)))
+            return Err(Error::BadRequest(response.text().await?))
         }
 
         Ok(response.json().await?)
