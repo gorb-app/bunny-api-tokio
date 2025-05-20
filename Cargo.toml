@@ -1,11 +1,20 @@
 [package]
 name = "bunny-api-tokio"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 authors = ["Radical <radical@radical.fun>"]
 license = "MIT"
 repository = "https://git.gorb.app/gorb/bunny-api-tokio"
 description = "Provides access to the Bunny CDN API asynchronously using tokio."
+keywords = [
+    "bunny",
+    "cdn",
+    "api-client",
+    "storage",
+    "async",
+    "tokio",
+    "client",
+]
 
 
 [dependencies]
