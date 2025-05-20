@@ -31,6 +31,7 @@ pub mod edge_storage;
 pub mod error;
 
 /// API Client for bunny
+#[derive(Debug, Clone)]
 pub struct Client {
     /// Used to interact with the Edge Storage API
     pub storage: edge_storage::Storage,

@@ -11,6 +11,7 @@ use serde::Deserialize;
 use url::Url;
 
 /// Endpoints for Edge Storage API
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Endpoint {
     /// Uses https://storage.bunnycdn.com as endpoint
     Frankfurt,
@@ -54,7 +55,7 @@ impl TryInto<Url> for Endpoint {
 }
 
 /// File information returned by list
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Clone)]
 #[serde(rename_all = "PascalCase")]
 pub struct ListFile {
     /// ??
@@ -90,6 +91,7 @@ pub struct ListFile {
 }
 
 /// Edge Storage API for bunny
+#[derive(Debug, Clone)]
 pub struct Storage {
     pub(crate) url: Url,
     pub(crate) reqwest: Arc<Client>,
