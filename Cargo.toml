@@ -10,10 +10,8 @@ keywords = [
     "bunny",
     "cdn",
     "api-client",
-    "storage",
     "async",
     "tokio",
-    "client",
 ]
 
 
