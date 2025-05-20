@@ -1,6 +1,8 @@
 # bunny-api-tokio
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Crates.io](https://img.shields.io/crates/v/bunny-api-tokio.svg)](https://crates.io/crates/bunny-api-tokio)
+[![Visitors](https://visitor-badge.laobi.icu/badge?page_id=gorb.bunny-api-tokio)](https://git.gorb.app/gorb/bunny-api-tokio)
 
 A Rust library providing **asynchronous access to the Bunny CDN API** using Tokio.
 
