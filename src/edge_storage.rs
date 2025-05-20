@@ -95,20 +95,24 @@ pub struct Storage {
 
 impl<'a> Storage {
     /// Sets endpoint and storage zone used by Edge Storage API
-    /// 
+    ///
     /// ```
     /// use bunny_api_tokio::{Client, error::Error, edge_storage::Endpoint};
-    /// 
+    ///
     /// #[tokio::main]
     /// async fn main() -> Result<(), Error> {
     ///     let mut client = Client::new("api_key").await?;
-    /// 
+    ///
     ///     client.storage.init(Endpoint::Frankfurt, "MyStorageZone");
-    /// 
+    ///
     ///     Ok(())
     /// }
     /// ```
-    pub fn init<T: AsRef<str>>(&mut self, endpoint: Endpoint, storage_zone: T) -> Result<(), Error> {
+    pub fn init<T: AsRef<str>>(
+        &mut self,
+        endpoint: Endpoint,
+        storage_zone: T,
+    ) -> Result<(), Error> {
         let endpoint: Url = endpoint.try_into()?;
         let storage_zone = String::from("/") + storage_zone.as_ref() + "/";
 
@@ -117,120 +121,126 @@ impl<'a> Storage {
     }
 
     /// Uploads a file to the Storage Zone
-    /// 
+    ///
     /// ```
     /// use bunny_api_tokio::{Client, error::Error, edge_storage::Endpoint};
     /// use tokio::fs;
-    /// 
+    ///
     /// #[tokio::main]
     /// async fn main() -> Result<(), Error> {
     ///     let mut client = Client::new("api_key").await?;
-    /// 
+    ///
     ///     client.storage.init(Endpoint::Frankfurt, "MyStorageZone");
-    /// 
+    ///
     ///     let file_bytes = fs::read("path/to/file.png").await?;
-    /// 
+    ///
     ///     // Will put a file in STORAGE_ZONE/images/file.png
     ///     client.storage.upload("/images/file.png", file_bytes).await?;
-    /// 
+    ///
     ///     Ok(())
     /// }
     /// ```
     pub async fn upload<T: AsRef<str>>(&self, path: T, file: Bytes) -> Result<(), Error> {
-        let response  = self.reqwest.put(self.url.join(path.as_ref())?)
+        let response = self
+            .reqwest
+            .put(self.url.join(path.as_ref())?)
             .header("Content-Type", "application/octet-stream")
             .body(file)
             .send()
             .await?;
 
         if response.status().as_u16() == 401 {
-            return Err(Error::Authentication(response.text().await?))
+            return Err(Error::Authentication(response.text().await?));
         } else if response.status().as_u16() == 400 {
-            return Err(Error::BadRequest(response.text().await?))
+            return Err(Error::BadRequest(response.text().await?));
         }
 
         Ok(())
     }
 
     /// Downloads a file from the Storage Zone
-    /// 
+    ///
     /// ```
     /// use bunny_api_tokio::{Client, error::Error, edge_storage::Endpoint};
     /// use tokio::fs;
     /// use tokio::io::AsyncWriteExt;
-    /// 
+    ///
     /// #[tokio::main]
     /// async fn main() -> Result<(), Error> {
     ///     let mut client = Client::new("api_key").await?;
-    /// 
+    ///
     ///     client.storage.init(Endpoint::Frankfurt, "MyStorageZone");
-    /// 
+    ///
     ///     // Will download the file STORAGE_ZONE/images/file.png
     ///     let contents = client.storage.download("/images/file.png").await?;
-    /// 
+    ///
     ///     let mut file = fs::File::create("file.png").await?;
     ///     file.write_all(contents).await?;
-    /// 
+    ///
     ///     Ok(())
     /// }
     /// ```
     pub async fn download<T: AsRef<str>>(&self, path: T) -> Result<Bytes, Error> {
-        let response  = self.reqwest.get(self.url.join(path.as_ref())?)
+        let response = self
+            .reqwest
+            .get(self.url.join(path.as_ref())?)
             .header("accept", "*/*")
             .send()
             .await?;
 
         if response.status().as_u16() == 401 {
-            return Err(Error::Authentication(response.text().await?))
+            return Err(Error::Authentication(response.text().await?));
         } else if response.status().as_u16() == 404 {
-            return Err(Error::NotFound(response.text().await?))
+            return Err(Error::NotFound(response.text().await?));
         }
 
         Ok(response.bytes().await?)
     }
 
     /// Deletes a file from the Storage Zone
-    /// 
+    ///
     /// ```
     /// use bunny_api_tokio::{Client, error::Error, edge_storage::Endpoint};
-    /// 
+    ///
     /// #[tokio::main]
     /// async fn main() -> Result<(), Error> {
     ///     let mut client = Client::new("api_key").await?;
-    /// 
+    ///
     ///     client.storage.init(Endpoint::Frankfurt, "MyStorageZone");
-    /// 
+    ///
     ///     // Will delete the file STORAGE_ZONE/images/file.png
     ///     client.storage.delete("/images/file.png").await?;
-    /// 
+    ///
     ///     Ok(())
     /// }
     /// ```
     pub async fn delete<T: AsRef<str>>(&self, path: T) -> Result<(), Error> {
-        let response  = self.reqwest.delete(self.url.join(path.as_ref())?)
+        let response = self
+            .reqwest
+            .delete(self.url.join(path.as_ref())?)
             .send()
             .await?;
 
         if response.status().as_u16() == 401 {
-            return Err(Error::Authentication(response.text().await?))
+            return Err(Error::Authentication(response.text().await?));
         } else if response.status().as_u16() == 400 {
-            return Err(Error::BadRequest(response.text().await?))
+            return Err(Error::BadRequest(response.text().await?));
         }
 
         Ok(())
     }
 
     /// Lists files on the Storage Zone
-    /// 
+    ///
     /// ```
     /// use bunny_api_tokio::{Client, error::Error, edge_storage::Endpoint};
-    /// 
+    ///
     /// #[tokio::main]
     /// async fn main() -> Result<(), Error> {
     ///     let mut client = Client::new("api_key").await?;
-    /// 
+    ///
     ///     client.storage.init(Endpoint::Frankfurt, "MyStorageZone");
-    /// 
+    ///
     ///     // Will list the files in STORAGE_ZONE/images/
     ///     let files = client.storage.list("/images/").await?;
     ///     
@@ -240,14 +250,16 @@ impl<'a> Storage {
     /// }
     /// ```
     pub async fn list<T: AsRef<str>>(&self, path: T) -> Result<Vec<ListFile>, Error> {
-        let response = self.reqwest.get(self.url.join(path.as_ref())?)
+        let response = self
+            .reqwest
+            .get(self.url.join(path.as_ref())?)
             .send()
             .await?;
 
         if response.status().as_u16() == 401 {
-            return Err(Error::Authentication(response.text().await?))
+            return Err(Error::Authentication(response.text().await?));
         } else if response.status().as_u16() == 400 {
-            return Err(Error::BadRequest(response.text().await?))
+            return Err(Error::BadRequest(response.text().await?));
         }
 
         Ok(response.json().await?)
