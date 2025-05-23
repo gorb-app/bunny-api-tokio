@@ -6,6 +6,10 @@
 
 A Rust library providing **asynchronous access to the Bunny CDN API** using Tokio.
 
+## Issues/PRs
+
+Issues and PRs can be submitted on the [GitHub mirror](https://github.com/gorb-app/bunny-api-tokio)
+
 ## Features
 - **Async-first**: Built with Tokio for non-blocking API calls.
 - **Edge Storage API**: Supports Bunny's edge storage operations.
