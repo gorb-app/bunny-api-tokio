@@ -26,6 +26,7 @@ use reqwest::{
 };
 use url::Url;
 
+pub mod bunny;
 pub mod edge_storage;
 pub mod error;
 

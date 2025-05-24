@@ -26,4 +26,8 @@ pub enum Error {
     /// Not found error
     #[error("not found: {0}")]
     NotFound(String),
+
+    /// Internal server error
+    #[error("internal server error: {0}")]
+    InternalServerError(String),
 }
