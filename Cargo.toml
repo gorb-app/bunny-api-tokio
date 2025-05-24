@@ -1,6 +1,6 @@
 [package]
 name = "bunny-api-tokio"
-version = "0.2.1"
+version = "0.3.0"
 edition = "2024"
 authors = ["Radical <radical@radical.fun>"]
 license = "MIT"
@@ -22,4 +22,4 @@ reqwest = { version = "0.12.15", features = ["json"] }
 serde = { version = "1.0.219", features = ["derive"] }
 thiserror = "2.0.12"
 tokio = "1.45.0"
-url = "2.5.4"
+url = { version = "2.5.4", features = ["serde"] }
