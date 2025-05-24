@@ -24,7 +24,6 @@ use reqwest::{
     Client as RClient,
     header::{HeaderMap, HeaderValue},
 };
-use std::sync::Arc;
 use url::Url;
 
 pub mod edge_storage;
@@ -33,6 +32,7 @@ pub mod error;
 /// API Client for bunny
 #[derive(Debug, Clone)]
 pub struct Client {
+    reqwest: RClient,
     /// Used to interact with the Edge Storage API
     pub storage: edge_storage::Storage,
 }
@@ -45,6 +45,7 @@ impl Client {
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<(), Error> {
+    ///     // Bunny.net api key
     ///     let mut client = Client::new("api_key").await?;
     ///
     ///     Ok(())
@@ -53,13 +54,16 @@ impl Client {
     pub async fn new<T: AsRef<str>>(api_key: T) -> Result<Self, Error> {
         let mut headers = HeaderMap::new();
         headers.append("AccessKey", HeaderValue::from_str(api_key.as_ref())?);
+        headers.append("accept", HeaderValue::from_str("application/json")?);
 
-        let reqwest = Arc::new(RClient::builder().default_headers(headers).build()?);
+        let reqwest = RClient::builder().default_headers(headers).build()?;
+        let storage_reqwest = RClient::new();
 
         Ok(Self {
+            reqwest,
             storage: edge_storage::Storage {
                 url: Url::parse("https://storage.bunnycdn.com").unwrap(),
-                reqwest,
+                reqwest: storage_reqwest,
             },
         })
     }

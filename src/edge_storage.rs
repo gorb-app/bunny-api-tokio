@@ -2,11 +2,9 @@
 //! 
 //! Contains enums, structs and functions for the Bunny Edge Storage API
 
-use std::sync::Arc;
-
 use crate::Error;
 use bytes::Bytes;
-use reqwest::Client;
+use reqwest::{header::{HeaderMap, HeaderValue}, Client};
 use serde::Deserialize;
 use url::Url;
 
@@ -94,7 +92,7 @@ pub struct ListFile {
 #[derive(Debug, Clone)]
 pub struct Storage {
     pub(crate) url: Url,
-    pub(crate) reqwest: Arc<Client>,
+    pub(crate) reqwest: Client,
 }
 
 impl<'a> Storage {
@@ -105,18 +103,25 @@ impl<'a> Storage {
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<(), Error> {
+    ///     // API key here can be left as "" if you never plan on using anything from the bunny.net api
     ///     let mut client = Client::new("api_key").await?;
     ///
-    ///     client.storage.init(Endpoint::Frankfurt, "MyStorageZone");
+    ///     // Requires own API key to use
+    ///     client.storage.init("storage_zone_api_key", Endpoint::Frankfurt, "MyStorageZone").await?;
     ///
     ///     Ok(())
     /// }
     /// ```
-    pub fn init<T: AsRef<str>>(
+    pub async fn init<T: AsRef<str>, T1: AsRef<str>>(
         &mut self,
+        api_key: T,
         endpoint: Endpoint,
-        storage_zone: T,
+        storage_zone: T1,
     ) -> Result<(), Error> {
+        let mut headers = HeaderMap::new();
+        headers.append("AccessKey", HeaderValue::from_str(api_key.as_ref())?);
+
+        self.reqwest = Client::builder().default_headers(headers).build()?;
         let endpoint: Url = endpoint.try_into()?;
         let storage_zone = String::from("/") + storage_zone.as_ref() + "/";
 
@@ -134,9 +139,9 @@ impl<'a> Storage {
     /// async fn main() -> Result<(), Error> {
     ///     let mut client = Client::new("api_key").await?;
     ///
-    ///     client.storage.init(Endpoint::Frankfurt, "MyStorageZone");
+    ///     client.storage.init("storage_zone_api_key", Endpoint::Frankfurt, "MyStorageZone").await?;
     ///
-    ///     let file_bytes = fs::read("path/to/file.png").await?;
+    ///     let file_bytes = fs::read("path/to/file.png").await.unwrap();
     ///
     ///     // Will put a file in STORAGE_ZONE/images/file.png
     ///     client.storage.upload("/images/file.png", file_bytes).await?;
@@ -173,13 +178,13 @@ impl<'a> Storage {
     /// async fn main() -> Result<(), Error> {
     ///     let mut client = Client::new("api_key").await?;
     ///
-    ///     client.storage.init(Endpoint::Frankfurt, "MyStorageZone");
+    ///     client.storage.init("storage_zone_api_key", Endpoint::Frankfurt, "MyStorageZone").await?;
     ///
     ///     // Will download the file STORAGE_ZONE/images/file.png
     ///     let contents = client.storage.download("/images/file.png").await?;
     ///
-    ///     let mut file = fs::File::create("file.png").await?;
-    ///     file.write_all(contents).await?;
+    ///     let mut file = fs::File::create("file.png").await.unwrap();
+    ///     file.write_all(contents).await.unwrap();
     ///
     ///     Ok(())
     /// }
@@ -210,7 +215,7 @@ impl<'a> Storage {
     /// async fn main() -> Result<(), Error> {
     ///     let mut client = Client::new("api_key").await?;
     ///
-    ///     client.storage.init(Endpoint::Frankfurt, "MyStorageZone");
+    ///     client.storage.init("storage_zone_api_key", Endpoint::Frankfurt, "MyStorageZone").await?;
     ///
     ///     // Will delete the file STORAGE_ZONE/images/file.png
     ///     client.storage.delete("/images/file.png").await?;
@@ -243,7 +248,7 @@ impl<'a> Storage {
     /// async fn main() -> Result<(), Error> {
     ///     let mut client = Client::new("api_key").await?;
     ///
-    ///     client.storage.init(Endpoint::Frankfurt, "MyStorageZone");
+    ///     client.storage.init("storage_zone_api_key", Endpoint::Frankfurt, "MyStorageZone").await?;
     ///
     ///     // Will list the files in STORAGE_ZONE/images/
     ///     let files = client.storage.list("/images/").await?;
