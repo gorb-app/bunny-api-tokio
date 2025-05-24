@@ -89,7 +89,7 @@ impl Client {
     ///     // Bunny.net api key
     ///     let mut client = Client::new("api_key").await?;
     ///
-    ///     let countries = client.get_countries().await?;
+    ///     let countries = client.get_country_list().await?;
     ///
     ///     println!("{:#?}", countries);
     ///     Ok(())
@@ -191,7 +191,7 @@ impl Client {
     ///     // Bunny.net api key
     ///     let mut client = Client::new("api_key").await?;
     ///
-    ///     client.purge_url("https://url_to_purge.com", false).await?;
+    ///     client.purge_url("https://url_to_purge.com".parse()?, false).await?;
     ///
     ///     Ok(())
     /// }

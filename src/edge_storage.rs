@@ -144,7 +144,7 @@ impl<'a> Storage {
     ///     let file_bytes = fs::read("path/to/file.png").await.unwrap();
     ///
     ///     // Will put a file in STORAGE_ZONE/images/file.png
-    ///     client.storage.upload("/images/file.png", file_bytes).await?;
+    ///     client.storage.upload("/images/file.png", file_bytes.into()).await?;
     ///
     ///     Ok(())
     /// }
@@ -184,7 +184,7 @@ impl<'a> Storage {
     ///     let contents = client.storage.download("/images/file.png").await?;
     ///
     ///     let mut file = fs::File::create("file.png").await.unwrap();
-    ///     file.write_all(contents).await.unwrap();
+    ///     file.write_all(&contents).await.unwrap();
     ///
     ///     Ok(())
     /// }
@@ -253,7 +253,7 @@ impl<'a> Storage {
     ///     // Will list the files in STORAGE_ZONE/images/
     ///     let files = client.storage.list("/images/").await?;
     ///     
-    ///     println!("{:#?}", files)
+    ///     println!("{:#?}", files);
     ///     
     ///     Ok(())
     /// }
