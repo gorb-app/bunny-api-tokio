@@ -1,4 +1,4 @@
-//! Contains structs, enums and implementations for the main bunny.net API
+//! Contains structs, enums and implementations for the main Bunny.net API
 
 use url::Url;
 
@@ -24,7 +24,7 @@ pub struct BunnyClient {
 }
 
 impl BunnyClient {
-    /// Creates a new BunnyClient using the supplied `api_key`
+    /// Creates a new Bunny.net API Client using the supplied `api_key`
     ///
     /// ```
     /// use bunny_api_tokio::{BunnyClient, error::Error};
@@ -54,12 +54,12 @@ impl BunnyClient {
     /// Returns a list of countries and tax rates
     ///
     /// ```
-    /// use bunny_api_tokio::{Client, error::Error};
+    /// use bunny_api_tokio::{BunnyClient, error::Error};
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<(), Error> {
     ///     // Bunny.net api key
-    ///     let mut client = Client::new("api_key").await?;
+    ///     let mut client = BunnyClient::new("api_key").await?;
     ///
     ///     let countries = client.get_country_list().await?;
     ///
@@ -87,12 +87,12 @@ impl BunnyClient {
     /// Returns a list of API Keys
     ///
     /// ```
-    /// use bunny_api_tokio::{Client, error::Error};
+    /// use bunny_api_tokio::{BunnyClient, error::Error};
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<(), Error> {
     ///     // Bunny.net api key
-    ///     let mut client = Client::new("api_key").await?;
+    ///     let mut client = BunnyClient::new("api_key").await?;
     ///
     ///     let api_keys = client.list_api_keys(1, 1000).await?;
     ///
@@ -124,12 +124,12 @@ impl BunnyClient {
     /// Returns a list of Regions
     ///
     /// ```
-    /// use bunny_api_tokio::{Client, error::Error};
+    /// use bunny_api_tokio::{BunnyClient, error::Error};
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<(), Error> {
     ///     // Bunny.net api key
-    ///     let mut client = Client::new("api_key").await?;
+    ///     let mut client = BunnyClient::new("api_key").await?;
     ///
     ///     let regions = client.region_list().await?;
     ///
@@ -156,12 +156,12 @@ impl BunnyClient {
     /// Purges a URL from the cache
     ///
     /// ```
-    /// use bunny_api_tokio::{Client, error::Error};
+    /// use bunny_api_tokio::{BunnyClient, error::Error};
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<(), Error> {
     ///     // Bunny.net api key
-    ///     let mut client = Client::new("api_key").await?;
+    ///     let mut client = BunnyClient::new("api_key").await?;
     ///
     ///     client.purge_url("https://url_to_purge.com".parse()?, false).await?;
     ///

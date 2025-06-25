@@ -20,7 +20,7 @@ pub struct EdgeStorageClient {
 }
 
 impl<'a> EdgeStorageClient {
-    /// Creates a new EdgeStorageClient using the supplied `api_key`
+    /// Creates a new EdgeStorageClient
     ///
     /// ```
     /// use bunny_api_tokio::{EdgeStorageClient, error::Error, edge_storage::Endpoint};
@@ -53,19 +53,17 @@ impl<'a> EdgeStorageClient {
     /// Uploads a file to the Storage Zone
     ///
     /// ```
-    /// use bunny_api_tokio::{Client, error::Error, edge_storage::Endpoint};
+    /// use bunny_api_tokio::{EdgeStorageClient, error::Error, edge_storage::Endpoint};
     /// use tokio::fs;
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<(), Error> {
-    ///     let mut client = Client::new("api_key").await?;
-    ///
-    ///     client.storage.init("storage_zone_api_key", Endpoint::Frankfurt, "MyStorageZone").await?;
+    ///     let mut client = EdgeStorageClient::new("storage_zone_api_key", Endpoint::Frankfurt, "MyStorageZone").await?;
     ///
     ///     let file_bytes = fs::read("path/to/file.png").await.unwrap();
     ///
     ///     // Will put a file in STORAGE_ZONE/images/file.png
-    ///     client.storage.upload("/images/file.png", file_bytes.into()).await?;
+    ///     client.upload("/images/file.png", file_bytes.into()).await?;
     ///
     ///     Ok(())
     /// }
@@ -91,18 +89,16 @@ impl<'a> EdgeStorageClient {
     /// Downloads a file from the Storage Zone
     ///
     /// ```
-    /// use bunny_api_tokio::{Client, error::Error, edge_storage::Endpoint};
+    /// use bunny_api_tokio::{EdgeStorageClient, error::Error, edge_storage::Endpoint};
     /// use tokio::fs;
     /// use tokio::io::AsyncWriteExt;
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<(), Error> {
-    ///     let mut client = Client::new("api_key").await?;
-    ///
-    ///     client.storage.init("storage_zone_api_key", Endpoint::Frankfurt, "MyStorageZone").await?;
-    ///
+    ///     let mut client = EdgeStorageClient::new("storage_zone_api_key", Endpoint::Frankfurt, "MyStorageZone").await?;
+    /// 
     ///     // Will download the file STORAGE_ZONE/images/file.png
-    ///     let contents = client.storage.download("/images/file.png").await?;
+    ///     let contents = client.download("/images/file.png").await?;
     ///
     ///     let mut file = fs::File::create("file.png").await.unwrap();
     ///     file.write_all(&contents).await.unwrap();
@@ -130,16 +126,14 @@ impl<'a> EdgeStorageClient {
     /// Deletes a file from the Storage Zone
     ///
     /// ```
-    /// use bunny_api_tokio::{Client, error::Error, edge_storage::Endpoint};
+    /// use bunny_api_tokio::{EdgeStorageClient, error::Error, edge_storage::Endpoint};
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<(), Error> {
-    ///     let mut client = Client::new("api_key").await?;
-    ///
-    ///     client.storage.init("storage_zone_api_key", Endpoint::Frankfurt, "MyStorageZone").await?;
-    ///
+    ///     let mut client = EdgeStorageClient::new("storage_zone_api_key", Endpoint::Frankfurt, "MyStorageZone").await?;
+    /// 
     ///     // Will delete the file STORAGE_ZONE/images/file.png
-    ///     client.storage.delete("/images/file.png").await?;
+    ///     client.delete("/images/file.png").await?;
     ///
     ///     Ok(())
     /// }
@@ -163,16 +157,14 @@ impl<'a> EdgeStorageClient {
     /// Lists files on the Storage Zone
     ///
     /// ```
-    /// use bunny_api_tokio::{Client, error::Error, edge_storage::Endpoint};
+    /// use bunny_api_tokio::{EdgeStorageClient, error::Error, edge_storage::Endpoint};
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<(), Error> {
-    ///     let mut client = Client::new("api_key").await?;
-    ///
-    ///     client.storage.init("storage_zone_api_key", Endpoint::Frankfurt, "MyStorageZone").await?;
-    ///
+    ///     let mut client = EdgeStorageClient::new("storage_zone_api_key", Endpoint::Frankfurt, "MyStorageZone").await?;
+    /// 
     ///     // Will list the files in STORAGE_ZONE/images/
-    ///     let files = client.storage.list("/images/").await?;
+    ///     let files = client.list("/images/").await?;
     ///     
     ///     println!("{:#?}", files);
     ///     

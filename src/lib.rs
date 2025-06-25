@@ -8,11 +8,11 @@
 //! 2. Start coding
 //!
 //! ```
-//! use bunny_api_tokio::{Client, error::Error};
+//! use bunny_api_tokio::{BunnyClient, error::Error};
 //!
 //! #[tokio::main]
 //! async fn main() -> Result<(), Error> {
-//!     let mut client = Client::new("api_key").await?;
+//!     let mut client = BunnyClient::new("api_key").await?;
 //!
 //!     Ok(())
 //! }
