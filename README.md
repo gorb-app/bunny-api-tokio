@@ -19,5 +19,5 @@ Issues and PRs can be submitted on the [GitHub mirror](https://github.com/gorb-a
 Add to your `Cargo.toml`:
 ```toml
 [dependencies]
-bunny-api-tokio = "0.2.0"
+bunny-api-tokio = "0.4.0"
 ```
