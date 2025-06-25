@@ -1,82 +1,54 @@
 //! Contains structs, enums and implementations for the main bunny.net API
 
-use serde::Deserialize;
 use url::Url;
 
-use crate::{Client, error::Error};
+use crate::error::Error;
+use reqwest::{
+    Client as RClient,
+    header::{HeaderMap, HeaderValue},
+};
 
-/// Country struct returned by get_countries() function
-#[derive(Deserialize, Debug, Clone)]
-#[serde(rename_all = "PascalCase")]
-pub struct Country {
-    /// Country name
-    pub name: String,
-    /// Country ISO code
-    pub iso_code: String,
-    /// Country is part of the EU
-    #[serde(rename = "IsEU")]
-    pub is_eu: bool,
-    /// Tax rate in percentage
-    pub tax_rate: f32,
-    /// Tax prefix
-    pub tax_prefix: String,
-    /// URL to country flag
-    pub flag_url: Url,
-    /// ??
-    pub pop_list: Vec<String>,
+mod api_key;
+pub use api_key::ApiKey;
+mod country;
+pub use country::Country;
+mod pagination;
+pub use pagination::Pagination;
+mod region;
+pub use region::Region;
+
+/// API Client for bunny.net
+#[derive(Debug, Clone)]
+pub struct BunnyClient {
+    reqwest: RClient,
 }
 
-/// API Key struct returned by list_api_keys()
-#[derive(Deserialize, Debug, Clone)]
-#[serde(rename_all = "PascalCase")]
-pub struct ApiKey {
-    /// API Key ID
-    pub id: i32,
-    /// API Key
-    pub key: String,
-    /// ??
-    pub roles: Vec<String>,
-}
+impl BunnyClient {
+    /// Creates a new BunnyClient using the supplied `api_key`
+    ///
+    /// ```
+    /// use bunny_api_tokio::{BunnyClient, error::Error};
+    ///
+    /// #[tokio::main]
+    /// async fn main() -> Result<(), Error> {
+    ///     // Bunny.net api key
+    ///     let mut client = BunnyClient::new("api_key").await?;
+    ///
+    ///     Ok(())
+    /// }
+    /// ```
+    pub async fn new<T: AsRef<str>>(api_key: T) -> Result<Self, Error> {
+        let mut headers = HeaderMap::new();
+        headers.append("AccessKey", HeaderValue::from_str(api_key.as_ref())?);
+        headers.append("accept", HeaderValue::from_str("application/json")?);
 
-/// Pagination struct used by Bunny.net API
-#[derive(Deserialize, Debug, Clone)]
-#[serde(rename_all = "PascalCase")]
-pub struct Pagination<T> {
-    /// Vector of type T
-    pub items: Vec<T>,
-    /// Current page number
-    pub current_page: i32,
-    /// Total amount of type T
-    pub total_items: i32,
-    /// Has more items
-    pub has_more_items: bool,
-}
+        let reqwest = RClient::builder().default_headers(headers).build()?;
 
-/// Region struct returned by region_list()
-#[derive(Deserialize, Debug, Clone)]
-#[serde(rename_all = "PascalCase")]
-pub struct Region {
-    /// Region ID
-    pub id: i32,
-    /// Name of the region
-    pub name: String,
-    /// Price per gigabyte in region
-    pub price_per_gigabyte: f32,
-    /// Region 2 letter code
-    pub region_code: String,
-    /// Continent 2 letter code
-    pub continent_code: String,
-    /// Country 2 letter code
-    pub country_code: String,
-    /// Region latitude
-    pub latitude: f32,
-    /// Region longitude
-    pub longitude: f32,
-    /// ??
-    pub allow_latency_routing: bool,
-}
+        Ok(Self {
+            reqwest,
+        })
+    }
 
-impl Client {
     // TODO: Following functions could probably use better naming, the names are currently derived from the titles on the API reference
 
     /// Returns a list of countries and tax rates

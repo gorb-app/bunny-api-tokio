@@ -1,0 +1,3 @@
+{
+    "rust-analyzer.cargo.features": ["bunnynet", "edge_storage"], "_":["stream", "edge_scripting", "bunny_shield"],
+}

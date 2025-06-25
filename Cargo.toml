@@ -1,6 +1,6 @@
 [package]
 name = "bunny-api-tokio"
-version = "0.3.0"
+version = "0.4.0"
 edition = "2024"
 authors = ["Radical <radical@radical.fun>"]
 license = "MIT"
@@ -14,14 +14,23 @@ keywords = [
     "tokio",
 ]
 
+[features]
+default = ["bunnynet"]
+bunnynet = []
+edge_storage = []
+# Kept here for future use
+#stream = []
+#edge_scripting = []
+#bunny_shield = []
+
 [dev-dependencies]
-tokio = { version = "1.45.0", features = ["fs", "rt", "rt-multi-thread", "macros"] }
+tokio = { version = "1.45.1", features = ["fs", "rt", "rt-multi-thread", "macros"] }
 
 [dependencies]
 bytes = "1.10.1"
 log = "0.4.27"
-reqwest = { version = "0.12.15", features = ["json"] }
+reqwest = { version = "0.12.20", features = ["json"] }
 serde = { version = "1.0.219", features = ["derive"] }
 thiserror = "2.0.12"
-tokio = "1.45.0"
+tokio = "1.45.1"
 url = { version = "2.5.4", features = ["serde"] }
