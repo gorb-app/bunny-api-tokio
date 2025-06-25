@@ -34,3 +34,6 @@ serde = { version = "1.0.219", features = ["derive"] }
 thiserror = "2.0.12"
 tokio = "1.45.1"
 url = { version = "2.5.4", features = ["serde"] }
+
+[package.metadata.docs.rs]
+all-features = true
