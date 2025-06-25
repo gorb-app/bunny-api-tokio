@@ -4,15 +4,15 @@
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
     /// Reqwest error
-    #[error("bleh")]
+    #[error(transparent)]
     Reqwest(#[from] reqwest::Error),
 
     /// Header contains non-ASCII characters
-    #[error("header contains non-ASCII characters")]
+    #[error(transparent)]
     InvalidHeader(#[from] reqwest::header::InvalidHeaderValue),
 
     /// URL Parse error
-    #[error("not a valid URL")]
+    #[error(transparent)]
     ParseError(#[from] url::ParseError),
 
     /// Authentication error
