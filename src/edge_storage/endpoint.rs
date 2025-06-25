@@ -1,5 +1,5 @@
-use url::Url;
 use crate::error::Error;
+use url::Url;
 
 /// Endpoints for Edge Storage API
 #[derive(Debug, Clone, PartialEq, Eq)]

@@ -1,10 +1,13 @@
 //! Edge Storage API
-//! 
+//!
 //! Contains enums, structs and functions for the Bunny Edge Storage API
 
 use crate::error::Error;
 use bytes::Bytes;
-use reqwest::{header::{HeaderMap, HeaderValue}, Client};
+use reqwest::{
+    Client,
+    header::{HeaderMap, HeaderValue},
+};
 use url::Url;
 
 mod endpoint;
@@ -32,7 +35,11 @@ impl<'a> EdgeStorageClient {
     ///     Ok(())
     /// }
     /// ```
-    pub async fn new<T: AsRef<str>, T1: AsRef<str>>(api_key: T, endpoint: Endpoint, storage_zone: T1) -> Result<Self, Error> {
+    pub async fn new<T: AsRef<str>, T1: AsRef<str>>(
+        api_key: T,
+        endpoint: Endpoint,
+        storage_zone: T1,
+    ) -> Result<Self, Error> {
         let mut headers = HeaderMap::new();
         headers.append("AccessKey", HeaderValue::from_str(api_key.as_ref())?);
         headers.append("accept", HeaderValue::from_str("application/json")?);
@@ -44,10 +51,7 @@ impl<'a> EdgeStorageClient {
 
         let url = endpoint.join(&storage_zone)?;
 
-        Ok(Self {
-            url,
-            reqwest,
-        })
+        Ok(Self { url, reqwest })
     }
 
     /// Uploads a file to the Storage Zone
@@ -96,7 +100,7 @@ impl<'a> EdgeStorageClient {
     /// #[tokio::main]
     /// async fn main() -> Result<(), Error> {
     ///     let mut client = EdgeStorageClient::new("storage_zone_api_key", Endpoint::Frankfurt, "MyStorageZone").await?;
-    /// 
+    ///
     ///     // Will download the file STORAGE_ZONE/images/file.png
     ///     let contents = client.download("/images/file.png").await?;
     ///
@@ -131,7 +135,7 @@ impl<'a> EdgeStorageClient {
     /// #[tokio::main]
     /// async fn main() -> Result<(), Error> {
     ///     let mut client = EdgeStorageClient::new("storage_zone_api_key", Endpoint::Frankfurt, "MyStorageZone").await?;
-    /// 
+    ///
     ///     // Will delete the file STORAGE_ZONE/images/file.png
     ///     client.delete("/images/file.png").await?;
     ///
@@ -162,7 +166,7 @@ impl<'a> EdgeStorageClient {
     /// #[tokio::main]
     /// async fn main() -> Result<(), Error> {
     ///     let mut client = EdgeStorageClient::new("storage_zone_api_key", Endpoint::Frankfurt, "MyStorageZone").await?;
-    /// 
+    ///
     ///     // Will list the files in STORAGE_ZONE/images/
     ///     let files = client.list("/images/").await?;
     ///     

@@ -44,9 +44,7 @@ impl BunnyClient {
 
         let reqwest = RClient::builder().default_headers(headers).build()?;
 
-        Ok(Self {
-            reqwest,
-        })
+        Ok(Self { reqwest })
     }
 
     // TODO: Following functions could probably use better naming, the names are currently derived from the titles on the API reference
